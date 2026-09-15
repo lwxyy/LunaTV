@@ -3187,7 +3187,7 @@ const VideoSourceConfig = ({
         });
 
         if (!response.ok) {
-          const errorData = await response.json();
+          const errorData: { error?: string } = await response.json().catch(() => ({}));
           throw new Error(errorData.error || '保存失败');
         }
 
@@ -7713,9 +7713,8 @@ const NetDiskConfig = ({
         });
 
         if (!response.ok) {
-          const errorData = await response.json();
+          const errorData: { error?: string } = await response.json().catch(() => ({}));
           throw new Error(errorData.error || '保存失败');
-        }
 
         showSuccess('网盘搜索配置保存成功', showAlert);
         await refreshConfig();
