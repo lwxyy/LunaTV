@@ -3115,9 +3115,9 @@ const VideoSourceConfig = ({
       });
 
       if (!resp.ok) {
-         const data: { error?: string } = await res.json().catch(() => ({}));
-           throw new Error(data.error || `操作失败: ${res.status}`);
-        }
+  const data: { error?: string } = await resp.json().catch(() => ({}));
+  throw new Error(data.error || `操作失败: ${resp.status}`);
+}
 
       // 成功后刷新配置
       await refreshConfig();
