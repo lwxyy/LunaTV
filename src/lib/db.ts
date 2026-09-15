@@ -1,6 +1,7 @@
 /* eslint-disable no-console, @typescript-eslint/no-explicit-any, @typescript-eslint/no-non-null-assertion */
 
 import { AdminConfig } from './admin.types';
+import { D1Storage } from './d1.db';
 import { KvrocksStorage } from './kvrocks.db';
 import { SqliteStorage } from './sqlite.db';
 import { RedisStorage } from './redis.db';
@@ -25,6 +26,7 @@ const STORAGE_TYPE =
     | 'upstash'
     | 'kvrocks'
     | 'sqlite'
+    | 'd1'
     | undefined) || 'localstorage';
 
 // 创建存储实例
@@ -36,6 +38,8 @@ function createStorage(): IStorage {
       return new UpstashRedisStorage();
     case 'kvrocks':
       return new KvrocksStorage();
+    case 'd1':
+      return new D1Storage();
     case 'sqlite':
       if (process.env.EDGEONE_PAGES === '1') {
         throw new Error(
