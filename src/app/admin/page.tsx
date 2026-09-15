@@ -600,7 +600,7 @@ const UserConfig = ({ config, role, refreshConfig }: UserConfigProps) => {
         });
 
         if (!res.ok) {
-             const data = await res.json().catch(() => ({}));
+             const data: any = await res.json().catch(() => ({}));
               throw new Error(data.error || `操作失败: ${res.status}`);
           }
 
