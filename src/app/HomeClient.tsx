@@ -736,9 +736,9 @@ function HomeClient({ initialConfig }: {
         }
         return res.json();
       })
-      .then(upcomingData => {
+      .then((upcomingData: any) => {
         if (upcomingData?.items) {
-          const releases = upcomingData.items;
+         const releases = upcomingData.items;
           console.log('📅 获取到的即将上映数据:', releases.length, '条');
 
           // 初始化Web Worker
