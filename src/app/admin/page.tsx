@@ -3114,7 +3114,7 @@ const VideoSourceConfig = ({
         body: JSON.stringify({ ...body }),
       });
 
-      if (!res.ok) {
+      if (!resp.ok) {
          const data: { error?: string } = await res.json().catch(() => ({}));
            throw new Error(data.error || `操作失败: ${res.status}`);
         }
@@ -4812,10 +4812,10 @@ const CategoryConfig = ({
         body: JSON.stringify({ ...body }),
       });
 
-      if (!res.ok) {
-         const data: { error?: string } = await res.json().catch(() => ({}));
-           throw new Error(data.error || `操作失败: ${res.status}`);
-        }
+      if (!resp.ok) {
+  const data: { error?: string } = await resp.json().catch(() => ({}));
+  throw new Error(data.error || `操作失败: ${resp.status}`);
+}
 
       // 成功后刷新配置
       await refreshConfig();
@@ -5154,10 +5154,10 @@ const ConfigFileComponent = ({ config, refreshConfig }: { config: AdminConfig | 
           body: JSON.stringify({ url: subscriptionUrl }),
         });
 
-        if (!res.ok) {
-         const data: { error?: string } = await res.json().catch(() => ({}));
-           throw new Error(data.error || `操作失败: ${res.status}`);
-        }
+        if (!resp.ok) {
+  const data: { error?: string } = await resp.json().catch(() => ({}));
+  throw new Error(data.error || `操作失败: ${resp.status}`);
+}
 
         const data = await resp.json();
         if (data.configContent) {
@@ -5191,10 +5191,10 @@ const ConfigFileComponent = ({ config, refreshConfig }: { config: AdminConfig | 
           }),
         });
 
-        if (!res.ok) {
-         const data: { error?: string } = await res.json().catch(() => ({}));
-           throw new Error(data.error || `操作失败: ${res.status}`);
-        }
+        if (!resp.ok) {
+  const data: { error?: string } = await resp.json().catch(() => ({}));
+  throw new Error(data.error || `操作失败: ${resp.status}`);
+}
 
         showSuccess('配置文件保存成功', showAlert);
         await refreshConfig();
@@ -5562,10 +5562,10 @@ const SiteConfigComponent = ({ config, refreshConfig }: { config: AdminConfig | 
           }),
         });
 
-        if (!res.ok) {
-         const data: { error?: string } = await res.json().catch(() => ({}));
-           throw new Error(data.error || `操作失败: ${res.status}`);
-        }
+        if (!resp.ok) {
+  const data: { error?: string } = await resp.json().catch(() => ({}));
+  throw new Error(data.error || `操作失败: ${resp.status}`);
+}
 
         const data = await resp.json();
 
@@ -6664,10 +6664,10 @@ const LiveSourceConfig = ({
         body: JSON.stringify({ ...body }),
       });
 
-      if (!res.ok) {
-         const data: { error?: string } = await res.json().catch(() => ({}));
-           throw new Error(data.error || `操作失败: ${res.status}`);
-        }
+      if (!resp.ok) {
+  const data: { error?: string } = await resp.json().catch(() => ({}));
+  throw new Error(data.error || `操作失败: ${resp.status}`);
+}
 
       // 成功后刷新配置
       await refreshConfig();
@@ -6704,10 +6704,10 @@ const LiveSourceConfig = ({
           headers: { 'Content-Type': 'application/json' },
         });
 
-        if (!res.ok) {
-         const data: { error?: string } = await res.json().catch(() => ({}));
-           throw new Error(data.error || `操作失败: ${res.status}`);
-        }
+        if (!resp.ok) {
+  const data: { error?: string } = await resp.json().catch(() => ({}));
+  throw new Error(data.error || `操作失败: ${resp.status}`);
+}
 
         // 刷新成功后重新获取配置
         await refreshConfig();
@@ -6954,10 +6954,10 @@ const LiveSourceConfig = ({
         body: JSON.stringify({ content, format, mode }),
       });
 
-      if (!res.ok) {
-         const data: { error?: string } = await res.json().catch(() => ({}));
-           throw new Error(data.error || `操作失败: ${res.status}`);
-        }
+      if (!resp.ok) {
+  const data: { error?: string } = await resp.json().catch(() => ({}));
+  throw new Error(data.error || `操作失败: ${resp.status}`);
+}
 
       const result = await response.json();
 
