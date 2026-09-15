@@ -3218,13 +3218,22 @@ const VideoSourceConfig = ({
           throw new Error('检测失败');
         }
 
-        const data = await response.json();
-        setProxyStatus({
-          healthy: data.videoProxy.health.healthy,
-          responseTime: data.videoProxy.health.responseTime,
-          error: data.videoProxy.health.error,
-          lastCheck: new Date().toLocaleString('zh-CN'),
-        });
+        const data: {
+  videoProxy: {
+    health: {
+      healthy: boolean;
+      responseTime: number;
+      error?: string;
+    };
+  };
+} = await response.json();
+
+setProxyStatus({
+  healthy: data.videoProxy.health.healthy,
+  responseTime: data.videoProxy.health.responseTime,
+  error: data.videoProxy.health.error,
+  lastCheck: new Date().toLocaleString('zh-CN'),
+});
 
         if (data.videoProxy.health.healthy) {
           showAlert({
