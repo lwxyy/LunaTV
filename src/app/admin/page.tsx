@@ -7702,27 +7702,28 @@ const NetDiskConfig = ({
     }
   }, [config]);
 
-  // 保存网盘搜索配置
-  const handleSave = async () => {
-    await withLoading('saveNetDiskConfig', async () => {
-      try {
-        const response = await fetch('/api/admin/netdisk', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(netDiskSettings)
-        });
+  // // 保存网盘搜索配置
+const handleSave = async () => {
+  await withLoading('saveNetDiskConfig', async () => {
+    try {
+      const response = await fetch('/api/admin/netdisk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(netDiskSettings)
+      });
 
-        if (!response.ok) {
-          const errorData: { error?: string } = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || '保存失败');
-
-        showSuccess('网盘搜索配置保存成功', showAlert);
-        await refreshConfig();
-      } catch (err) {
-        showError(err instanceof Error ? err.message : '保存失败', showAlert);
+      if (!response.ok) {
+        const errorData: { error?: string } = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || '保存失败');
       }
-    });
-  };
+
+      showSuccess('网盘搜索配置保存成功', showAlert);
+      await refreshConfig();
+    } catch (err) {
+      showError(err instanceof Error ? err.message : '保存失败', showAlert);
+    }
+  });
+};
 
   // 处理网盘类型选择
   const handleCloudTypeChange = (type: string, enabled: boolean) => {
