@@ -1,4 +1,21 @@
+name = "lunatv"
+
+main = ".open-next/worker.js"
+
+compatibility_date = "2026-09-16"
+
+minify = true
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "lunatv"
 database_id = "cc8fd820-0673-4c20-bbc3-8ddd77362023"
+
+[vars]
+NODE_ENV = "production"
+BUILD_TARGET = "cloudflare"
+NEXT_PUBLIC_STORAGE_TYPE = "d1"
