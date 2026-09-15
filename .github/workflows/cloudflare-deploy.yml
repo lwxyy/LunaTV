@@ -1,0 +1,123 @@
+name: Deploy LunaTV to Cloudflare
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 下载你的 LunaTV 源代码
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # 2. 安装 pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
+
+      # 3. 安装 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      # 4. 安装 LunaTV 原本的依赖
+      - name: Install LunaTV dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 5. 临时安装 Cloudflare 所需工具
+      #    不直接修改你 GitHub 仓库里的 package.json
+      - name: Install Cloudflare dependencies
+        run: |
+          pnpm add -D @opennextjs/cloudflare@latest wrangler@latest --lockfile=false
+
+      # 6. 设置 LunaTV 的环境变量
+      - name: Set environment variables
+        run: |
+          echo "NODE_ENV=production" >> $GITHUB_ENV
+          echo "BUILD_TARGET=cloudflare" >> $GITHUB_ENV
+
+          echo "USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+
+          echo "NEXT_PUBLIC_STORAGE_TYPE=${{ secrets.NEXT_PUBLIC_STORAGE_TYPE }}" >> $GITHUB_ENV
+          echo "UPSTASH_URL=${{ secrets.UPSTASH_URL }}" >> $GITHUB_ENV
+          echo "UPSTASH_TOKEN=${{ secrets.UPSTASH_TOKEN }}" >> $GITHUB_ENV
+
+          echo "SITE_BASE=${{ secrets.SITE_BASE }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_SITE_NAME=${{ secrets.NEXT_PUBLIC_SITE_NAME }}" >> $GITHUB_ENV
+
+      # 7. 创建 OpenNext 配置
+      - name: Create OpenNext configuration
+        run: |
+          cat > open-next.config.ts <<'EOF'
+          import { defineCloudflareConfig } from "@opennextjs/cloudflare";
+
+          export default defineCloudflareConfig();
+          EOF
+
+      # 8. 创建 Cloudflare Workers 配置
+      - name: Create Wrangler configuration
+        run: |
+          cat > wrangler.toml <<'EOF'
+          name = "lunatv"
+          main = ".open-next/worker.js"
+
+          compatibility_date = "2026-09-16"
+
+          compatibility_flags = [
+            "nodejs_compat"
+          ]
+
+          minify = true
+
+          [assets]
+          directory = ".open-next/assets"
+          binding = "ASSETS"
+
+          [observability]
+          enabled = true
+
+          [vars]
+          NODE_ENV = "production"
+          BUILD_TARGET = "cloudflare"
+          EOF
+
+      # 9. 构建 LunaTV
+      - name: Build LunaTV for Cloudflare
+        run: |
+          pnpm exec opennextjs-cloudflare build
+
+      # 10. 部署管理员账号
+      - name: Set Cloudflare Worker secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          UPSTASH_URL: ${{ secrets.UPSTASH_URL }}
+          UPSTASH_TOKEN: ${{ secrets.UPSTASH_TOKEN }}
+        run: |
+          printf '%s' "$USERNAME" | pnpm exec wrangler secret put USERNAME
+          printf '%s' "$PASSWORD" | pnpm exec wrangler secret put PASSWORD
+          printf '%s' "$UPSTASH_URL" | pnpm exec wrangler secret put UPSTASH_URL
+          printf '%s' "$UPSTASH_TOKEN" | pnpm exec wrangler secret put UPSTASH_TOKEN
+
+      # 11. 部署到 Cloudflare Workers
+      - name: Deploy to Cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          pnpm exec wrangler deploy
