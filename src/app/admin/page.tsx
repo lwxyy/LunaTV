@@ -841,8 +841,8 @@ const UserConfig = ({ config, role, refreshConfig }: UserConfigProps) => {
         });
 
         if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          throw new Error(data.error || `操作失败: ${res.status}`);
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
         }
 
         const userCount = selectedUsers.size;
@@ -890,8 +890,8 @@ const UserConfig = ({ config, role, refreshConfig }: UserConfigProps) => {
         });
 
         if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          throw new Error(data.error || `操作失败: ${res.status}`);
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
         }
 
         // 成功后刷新配置
@@ -935,9 +935,9 @@ const UserConfig = ({ config, role, refreshConfig }: UserConfigProps) => {
       });
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `操作失败: ${res.status}`);
-      }
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
+        }
 
       // 成功后刷新配置（无需整页刷新）
       await refreshConfig();
