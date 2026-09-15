@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS search_history (
   PRIMARY KEY (username, keyword)
 );
 
-CREATE INDEX IF NOT EXISTS idx_search_history_username
+CREATE INDEX IF NOT EXISTS idx_search_history_username_created_at
 ON search_history(username, created_at DESC);
 
 CREATE TABLE IF NOT EXISTS skip_configs (
@@ -66,9 +66,6 @@ CREATE TABLE IF NOT EXISTS skip_configs (
   PRIMARY KEY (username, source, id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_skip_configs_username
-ON skip_configs(username);
-
 CREATE TABLE IF NOT EXISTS episode_skip_configs (
   username TEXT NOT NULL,
   source TEXT NOT NULL,
@@ -76,9 +73,6 @@ CREATE TABLE IF NOT EXISTS episode_skip_configs (
   value TEXT NOT NULL,
   PRIMARY KEY (username, source, id)
 );
-
-CREATE INDEX IF NOT EXISTS idx_episode_skip_configs_username
-ON episode_skip_configs(username);
 
 CREATE TABLE IF NOT EXISTS admin_config (
   id INTEGER PRIMARY KEY CHECK (id = 1),
@@ -90,6 +84,9 @@ CREATE TABLE IF NOT EXISTS cache (
   value TEXT NOT NULL,
   expires_at INTEGER
 );
+
+CREATE INDEX IF NOT EXISTS idx_cache_expires_at
+ON cache(expires_at);
 
 CREATE TABLE IF NOT EXISTS login_stats (
   username TEXT PRIMARY KEY,
@@ -103,9 +100,6 @@ CREATE TABLE IF NOT EXISTS login_stats (
   last_login_browser TEXT,
   last_login_os TEXT
 );
-
-CREATE INDEX IF NOT EXISTS idx_login_stats_last_login
-ON login_stats(last_login_time);
 
 CREATE TABLE IF NOT EXISTS emby_configs (
   username TEXT PRIMARY KEY,
