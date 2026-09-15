@@ -5,8 +5,8 @@ export class ClientCache {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const result = await response.json();
-      return result.data;
+      const result = (await response.json()) as any;
+      return result?.data || null;
     } catch (error) {
       console.error('获取缓存失败:', error);
       return null;

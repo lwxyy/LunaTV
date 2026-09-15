@@ -53,7 +53,7 @@ export async function GetBangumiCalendarData(): Promise<BangumiCalendarData[]> {
       throw new Error(`Bangumi API returned ${response.status}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as any;
     if (!Array.isArray(data)) {
       throw new Error('Bangumi API returned non-array data');
     }

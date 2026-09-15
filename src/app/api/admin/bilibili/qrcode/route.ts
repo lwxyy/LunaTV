@@ -18,9 +18,9 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    const data = await response.json();
+    const data = (await response.json()) as any;
 
-    if (data.code === 0) {
+    if (data?.code === 0 && data?.data) {
       return NextResponse.json({
         success: true,
         qrcodeUrl: data.data.url,
