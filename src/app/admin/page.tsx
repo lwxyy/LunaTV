@@ -3114,10 +3114,10 @@ const VideoSourceConfig = ({
         body: JSON.stringify({ ...body }),
       });
 
-      if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
-        throw new Error(data.error || `操作失败: ${resp.status}`);
-      }
+      if (!res.ok) {
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
+        }
 
       // 成功后刷新配置
       await refreshConfig();
@@ -4812,10 +4812,10 @@ const CategoryConfig = ({
         body: JSON.stringify({ ...body }),
       });
 
-      if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
-        throw new Error(data.error || `操作失败: ${resp.status}`);
-      }
+      if (!res.ok) {
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
+        }
 
       // 成功后刷新配置
       await refreshConfig();
@@ -5154,9 +5154,9 @@ const ConfigFileComponent = ({ config, refreshConfig }: { config: AdminConfig | 
           body: JSON.stringify({ url: subscriptionUrl }),
         });
 
-        if (!resp.ok) {
-          const data = await resp.json().catch(() => ({}));
-          throw new Error(data.error || `拉取失败: ${resp.status}`);
+        if (!res.ok) {
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
         }
 
         const data = await resp.json();
@@ -5191,9 +5191,9 @@ const ConfigFileComponent = ({ config, refreshConfig }: { config: AdminConfig | 
           }),
         });
 
-        if (!resp.ok) {
-          const data = await resp.json().catch(() => ({}));
-          throw new Error(data.error || `保存失败: ${resp.status}`);
+        if (!res.ok) {
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
         }
 
         showSuccess('配置文件保存成功', showAlert);
@@ -5562,9 +5562,9 @@ const SiteConfigComponent = ({ config, refreshConfig }: { config: AdminConfig | 
           }),
         });
 
-        if (!resp.ok) {
-          const data = await resp.json().catch(() => ({}));
-          throw new Error(data.error || `保存失败: ${resp.status}`);
+        if (!res.ok) {
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
         }
 
         const data = await resp.json();
@@ -6664,10 +6664,10 @@ const LiveSourceConfig = ({
         body: JSON.stringify({ ...body }),
       });
 
-      if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
-        throw new Error(data.error || `操作失败: ${resp.status}`);
-      }
+      if (!res.ok) {
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
+        }
 
       // 成功后刷新配置
       await refreshConfig();
@@ -6704,9 +6704,9 @@ const LiveSourceConfig = ({
           headers: { 'Content-Type': 'application/json' },
         });
 
-        if (!response.ok) {
-          const data = await response.json().catch(() => ({}));
-          throw new Error(data.error || `刷新失败: ${response.status}`);
+        if (!res.ok) {
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
         }
 
         // 刷新成功后重新获取配置
@@ -6954,10 +6954,10 @@ const LiveSourceConfig = ({
         body: JSON.stringify({ content, format, mode }),
       });
 
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || '导入失败');
-      }
+      if (!res.ok) {
+         const data: { error?: string } = await res.json().catch(() => ({}));
+           throw new Error(data.error || `操作失败: ${res.status}`);
+        }
 
       const result = await response.json();
 
