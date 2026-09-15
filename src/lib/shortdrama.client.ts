@@ -131,7 +131,8 @@ export async function searchShortDramas(
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
+// 兼容项目其他模块使用的函数名称
+export const getRecommendedShortDramas = getShortDramaRecommends;
     const result = (await response.json()) as any;
     return result;
   } catch (error) {
