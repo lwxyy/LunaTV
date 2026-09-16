@@ -8,6 +8,18 @@ const cacheable = new CacheableLookup({
 });
 
 /**
+ * 信任且已知安全的公开图片/媒体 CDN 域名后缀列表
+ * 匹配这些域名的 URL 将绕过 DNS IP 拦截，直接放行
+ */
+const ALLOWED_PUBLIC_DOMAINS = [
+  'doubanio.com',      // 豆瓣图片 CDN (img1, img3, img9 等)
+  'douban.com',        // 豆瓣主站资源
+  'tmdb.org',          // TMDB 封面
+  'themoviedb.org',    // TMDB 媒体资源
+  'mpath.org',         // 其它常见图床
+];
+
+/**
  * DNS 查询重试机制（指数退避）
  * 解决 EAI_AGAIN 临时性 DNS 失败问题
  */
@@ -169,6 +181,14 @@ export async function validateProxyTargetUrl(rawUrl: string): Promise<string> {
   const hostname = normalizeHostname(parsed.hostname);
   if (isBlockedHostname(hostname)) {
     throw new Error('Blocked host');
+  }
+
+  // 特殊判定：如果是白名单中的公开媒体/图片域名（如 *.doubanio.com），直接放行，避免 DNS 解析失败或误判
+  const isAllowedPublicDomain = ALLOWED_PUBLIC_DOMAINS.some(
+    (domain) => hostname === domain || hostname.endsWith(`.${domain}`)
+  );
+  if (isAllowedPublicDomain) {
+    return parsed.toString();
   }
 
   const literalVersion = isIP(hostname);
