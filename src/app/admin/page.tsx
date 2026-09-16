@@ -5168,7 +5168,7 @@ const ConfigFileComponent = ({ config, refreshConfig }: { config: AdminConfig | 
   throw new Error(data.error || `操作失败: ${resp.status}`);
 }
 
-        const data = await resp.json();
+        const data: any = await resp.json();
         if (data.configContent) {
           setConfigContent(data.configContent);
           // 更新本地配置的最后检查时间
