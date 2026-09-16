@@ -40,6 +40,8 @@ jobs:
           pnpm exec wrangler d1 execute lunatv --remote --file=migrations/0001_init.sql
 
       - name: Build LunaTV for Cloudflare
+        env:
+          BUILD_TARGET: cloudflare
         run: pnpm exec opennextjs-cloudflare build
 
       - name: Set Cloudflare Worker secrets
