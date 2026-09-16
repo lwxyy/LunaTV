@@ -42,6 +42,7 @@ jobs:
       - name: Build LunaTV for Cloudflare
         env:
           BUILD_TARGET: cloudflare
+          NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE: img3
         run: pnpm exec opennextjs-cloudflare build
 
       - name: Set Cloudflare Worker secrets
