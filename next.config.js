@@ -61,4 +61,8 @@ module.exports = (phase) => {
     // 跳过类型检查（Vercel/Docker 构建不受影响，依然严格检查）
     typescript: {
       ignoreBuildErrors: process.env.BUILD_TARGET === 'cloudflare',
-    },
+    }, 
+  };
+
+  return nextConfig;
+};
