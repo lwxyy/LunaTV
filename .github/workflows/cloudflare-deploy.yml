@@ -42,6 +42,7 @@ jobs:
       - name: Build LunaTV for Cloudflare
         env:
           BUILD_TARGET: cloudflare
+          NEXT_PUBLIC_STORAGE_TYPE: d1
           NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE: cmliussss-cdn-tencent
         run: pnpm exec opennextjs-cloudflare build
 
