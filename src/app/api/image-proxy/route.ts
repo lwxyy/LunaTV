@@ -59,15 +59,24 @@ export async function GET(request: Request) {
   const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒超时
 
   try {
-    // 动态设置 Referer 和 Origin（根据图片源域名）
     const imageUrlObj = new URL(imageUrl);
-    const sourceOrigin = `${imageUrlObj.protocol}//${imageUrlObj.host}`;
+    const hostname = imageUrlObj.hostname.toLowerCase();
+
+    // 默认 Referer 和 Origin 规则
+    let referer = `${imageUrlObj.protocol}//${imageUrlObj.host}/`;
+    let origin = `${imageUrlObj.protocol}//${imageUrlObj.host}`;
+
+    // 适配防盗链限制严格的特殊源站点（如豆瓣）
+    if (hostname.includes('doubanio.com') || hostname.includes('douban.com')) {
+      referer = 'https://movie.douban.com/';
+      origin = 'https://movie.douban.com';
+    }
 
     // 构建请求头
     const fetchHeaders: HeadersInit = {
-      'Referer': sourceOrigin + '/',
-      'Origin': sourceOrigin,
-      'User-Agent': DEFAULT_USER_AGENT,
+      'Referer': referer,
+      'Origin': origin,
+      'User-Agent': DEFAULT_USER_AGENT || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       'Accept': 'image/avif,image/webp,image/jxl,image/apng,image/svg+xml,image/*,*/*;q=0.8',
       'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
       'Accept-Encoding': 'gzip, deflate, br',
