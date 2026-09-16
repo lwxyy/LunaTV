@@ -43,7 +43,7 @@ jobs:
         env:
           BUILD_TARGET: cloudflare
           NEXT_PUBLIC_STORAGE_TYPE: d1
-          NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE: cmliussss-cdn-tencent
+          NEXT_PUBLIC_DOUBAN_IMAGE_PROXY_TYPE: none
         run: pnpm exec opennextjs-cloudflare build
 
       - name: Set Cloudflare Worker secrets
